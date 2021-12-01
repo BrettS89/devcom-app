@@ -41,6 +41,13 @@ const CreateTicket = () => {
   }
 
   const searchUsers = _.debounce(async (term: string) => {
+    if (!term) {
+      setUsers([]);
+      return;
+    }
+
+    const regex = `\\b${term}`
+
     setLoading(true)
 
     const foundUsers: Users = await api
@@ -48,16 +55,13 @@ const CreateTicket = () => {
       .find({
         query: {
           accountId: user?.details?.accountId,
-          $or: [
-            { firstName: term },
-            { lastName: term },
-          ],
+          fullName: { $regex: regex, $options: 'i' }
         },
       });
 
     setUsers(foundUsers.data);
     setLoading(false);
-  }, 300);
+  }, 400);
 
   const createTicket = () => {
     dispatch({
