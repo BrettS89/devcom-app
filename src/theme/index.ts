@@ -1,0 +1,37 @@
+import { createTheme } from '@material-ui/core/styles';
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#3a48b3',
+    },
+    secondary: {
+      main: '#f5f5f5',
+    },
+  },
+  typography: {
+    fontFamily: "\"Proxima Nova\", sans-serif",
+    button: {
+      textTransform: 'none',
+      fontFamily: "\"Proxima Nova\", sans-serif",
+    }
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: 10,
+        fontFamily: "\"Proxima Nova\", sans-serif",
+      }, 
+    },
+    MuiTypography: {
+      root: {
+        color: '#242424',
+      }
+    },
+    MuiOutlinedInput: {
+      root: {
+        // borderRadius: 10,
+      }
+    }
+  }, 
+});

@@ -1,13 +1,61 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima'), url(./fonts/Proxima/Proxima-Nova-Regular.otf) format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima'), url(./fonts/Proxima/Proxima-Nova-Semi-Bold.otf) format('opentype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: local('Proxima'), url(./fonts/Proxima/Proxima-Nova-Bold.otf) format('opentype');
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  max-width: 100%;
+}
+
 body {
+  display: flex;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: #F5F5F5;
+  font-family: 'Proxima Nova', sans-serif;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex: 1;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.page {
+  padding: 15px 20px;
+}
+
+.page-title {
+  margin-bottom: 15px!important;
+  font-weight: 700!important;
+}
+
+.bold {
+  font-weight: 700!important;
+}
+
+.semi-bold {
+  font-weight: 600!important;
+}
+
+.hover:hover {
+  cursor: pointer;
 }
