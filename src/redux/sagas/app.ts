@@ -52,7 +52,10 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
       .find({
         query: {
           accountId: user.accountId,
-          assigneeUserId: user._id,
+          $or: [
+            { assigneeUserId: user._id, },
+            { assignerUserId: user._id, },
+          ],
           $resolve: {
             assigner: true,
             assignee: true,

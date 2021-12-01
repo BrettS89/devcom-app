@@ -21,12 +21,14 @@ const CreateTicket = () => {
   
   const app = useSelector(appSelector);
   const user = useSelector(userSelector);
+
   const dispatch = useDispatch();
   const classes = useStyles();
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [assignedDev, setAssignedDev] = useState('');
-  const [assignedTester, setAssignedTester] = useState('');
+  const [assignedDev, setAssignedDev] = useState(undefined);
+  const [assignedTester, setAssignedTester] = useState(undefined);
   const [assignedManager, setAssignedManager] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,19 @@ const CreateTicket = () => {
 
     setUsers(foundUsers.data);
     setLoading(false);
-}, 300)
+  }, 300);
+
+  const createTicket = () => {
+    dispatch({
+      type: ActionTypes.CREATE_TICKET,
+      payload: {
+        name,
+        description,
+        assigneeUserId: assignedDev,
+        testerUserId: assignedTester,
+      },
+    });
+  };
 
   return (
     <Dialog
@@ -77,6 +91,8 @@ const CreateTicket = () => {
             placeholder='Name'
             className={classes.field}
             size='small'
+            onChange={e => setName(e.target.value)}
+            value={name}
           />
           <TextField
             multiline
@@ -85,6 +101,8 @@ const CreateTicket = () => {
             rows={20}
             // style={{backgroundColor: 'gray' }}
             className={classes.field}
+            onChange={e => setDescription(e.target.value)}
+            name={description}
           />
   
           <div className={classes.assignAndFiles}>
@@ -141,7 +159,12 @@ const CreateTicket = () => {
           </div>
           
           <div>
-          <Button variant='contained' color='primary' disableElevation>
+          <Button
+            variant='contained'
+            color='primary'
+            disableElevation
+            onClick={createTicket}
+          >
             Create Ticket
           </Button>
           </div>
