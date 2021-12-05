@@ -4,7 +4,7 @@ import {
 import _ from 'lodash';
 import api from '../../api';
 import { ActionTypes } from '../actions';
-import { Channel, ChannelMembers, Channels, DMs, User, Tickets } from '../../types/services';
+import { ChannelMembers, Channels, DMs, User, Tickets } from '../../types/services';
 import { sleep } from '../../utilities';
 
 export default [
@@ -56,6 +56,9 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
             { assigneeUserId: user._id, },
             { assignerUserId: user._id, },
           ],
+          $sort: {
+            _id: -1,
+          },
           $resolve: {
             assigner: true,
             assignee: true,
