@@ -3,12 +3,13 @@ import {
 } from 'redux-saga/effects';
 import _ from 'lodash';
 import api from '../../api';
-import { ActionTypes, communicationSelector, userSelector, StoreState } from '../index';
-import { Ticket } from '../../types/services';
+import { ActionTypes, communicationSelector, userSelector, StoreState, projectSelector } from '../index';
+import { Ticket, Tickets } from '../../types/services';
 
 export default [
   createTicketWatcher,
   patchTicketWatcher,
+  fetchMoreTicketsWatcher,
 ];
 
 function * patchTicketWatcher() {
@@ -19,6 +20,10 @@ function * createTicketWatcher() {
   yield takeLatest(ActionTypes.CREATE_TICKET, createTicketHandler);
 }
 
+function * fetchMoreTicketsWatcher() {
+  yield takeLatest(ActionTypes.FETCH_MORE_TICKETS, fetchMoreTicketsHandler);
+}
+
 interface CreateTicketProps {
   type: ActionTypes;
   payload: {
@@ -26,6 +31,8 @@ interface CreateTicketProps {
     description: string;
     assigneeUserId?: string;
     testerUserId?: string;
+    priority?: number;
+    status: string;
   }
 }
 
@@ -33,6 +40,7 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
   try {
     const user: StoreState['user'] = yield select(userSelector);
     const communication: StoreState['communication'] = yield select(communicationSelector);
+    const project: StoreState['project'] = yield select(projectSelector);
 
     const data = {
       accountId: user?.details?.accountId,
@@ -41,10 +49,9 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
       assignerUserId: user?.details?._id,
       assigneeUserId: payload.assigneeUserId,
       testerUserId: payload.testerUserId,
-      status: 'Ready to Begin',
+      status: payload.status,
+      priority: payload.priority || 3,
     };
-
-    console.log(data);
 
     const createTicket = () => api
       .service('project/ticket')
@@ -60,10 +67,12 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
       });
 
     const createdTicket: Ticket = yield call(createTicket);
-
     const tickets = _.cloneDeep(communication.tickets);
-
     tickets.unshift(createdTicket);
+
+    const backlog = _.cloneDeep(project.backlog);
+    backlog.data.unshift(createdTicket);
+    backlog.count++;
 
     yield put({
       type: ActionTypes.SET_CREATE_TICKET_MODAL_OPEN,
@@ -73,6 +82,11 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
     yield put({
       type: ActionTypes.SET_COMMUNICATION_TICKETS,
       payload: tickets,
+    });
+
+    yield put({
+      type: ActionTypes.SET_BACKLOG,
+      payload: backlog,
     });
 
   } catch(e) {
@@ -126,3 +140,40 @@ function * patchTicketHandler({ payload }: PatchTicketProps) {
   }
 }
 
+interface FetchMoreProps {
+  type: ActionTypes;
+  payload: number;
+}
+
+function * fetchMoreTicketsHandler({ payload }: FetchMoreProps) {
+  try {
+    const user: StoreState['user'] = yield select(userSelector);
+    const project: StoreState['project'] = yield select(projectSelector);
+
+    if (project.backlog.data.length === project.backlog.count) {
+      return;
+    }
+
+    const fetchMore = () => api
+      .service('project/ticket')
+      .find({
+        query: {
+          accountId: user?.details?.accountId,
+          $skip: project.backlog.data.length,
+          $limit: payload,
+          $sort: { _id: -1 },
+        },
+      });
+
+    const tickets: Tickets = yield call(fetchMore);
+    const backlog = _.cloneDeep(project.backlog);
+    backlog.data.push(...tickets.data);
+
+    yield put({
+      type: ActionTypes.SET_BACKLOG,
+      payload: backlog,
+    });
+  } catch(e) {
+    console.log(e);
+  }
+}

@@ -5,26 +5,26 @@ export const useStyles = makeStyles({
     display: 'flex',
     flex: 1,
     padding: 30,
-    // height: 800,
   },
   modalContent: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    // alignItems: 'center',
     height: 780,
   },
   header: {
     marginBottom: 20,
     display: 'flex',
     justifyContent: 'space-between',
-    // alignItems: 'center',
   },
   field: {
     marginBottom: 20,
   },
+  label: {
+    marginBottom: 10,
+  },
   assignField: {
-    // width: '50%',
+    width: '100%',
     marginBottom: 20,
   },
   assignAndFiles: {
@@ -33,10 +33,10 @@ export const useStyles = makeStyles({
   },
   assignSection: {
     width: '50%',
-    paddingRight: 10,
+    paddingLeft: 10,
   },
   filesSection: {
     width: '50%',
-    paddingLeft: 10,
+    paddingRight: 10,
   }
 });

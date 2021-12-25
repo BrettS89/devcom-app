@@ -4,15 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import { priority } from '../../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useStyles } from './styles';
 import Autocomplete from '../autocomplete';
 import api from '../../api';
 import { Users, User } from '../../types/services';
-import { appSelector, userSelector, ActionTypes } from '../../redux';
+import { appSelector, userSelector, ActionTypes, projectSelector } from '../../redux';
 
 const CreateTicket = () => {
   const devRef = useRef();
@@ -20,6 +22,7 @@ const CreateTicket = () => {
   const managerRef = useRef();
   
   const app = useSelector(appSelector);
+  const project = useSelector(projectSelector);
   const user = useSelector(userSelector);
 
   const dispatch = useDispatch();
@@ -30,6 +33,10 @@ const CreateTicket = () => {
   const [assignedDev, setAssignedDev] = useState(undefined);
   const [assignedTester, setAssignedTester] = useState(undefined);
   const [assignedManager, setAssignedManager] = useState('');
+
+  const [ticketPriority, setTicketPriority] = useState(undefined);
+  const [ticketStatus, setTicketStatus] = useState(undefined);
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,6 +78,8 @@ const CreateTicket = () => {
         description,
         assigneeUserId: assignedDev,
         testerUserId: assignedTester,
+        priority: ticketPriority || project.workflow[0]._id,
+        status: ticketStatus,
       },
     });
   };
@@ -100,65 +109,100 @@ const CreateTicket = () => {
           />
           <TextField
             multiline
+            minRows={3}
             variant='outlined'
             placeholder='Description'
-            rows={20}
-            // style={{backgroundColor: 'gray' }}
+            size='small'
             className={classes.field}
             onChange={e => setDescription(e.target.value)}
             name={description}
           />
-  
+
           <div className={classes.assignAndFiles}>
-            <div className={classes.assignSection}>
-            <Autocomplete
-              autoRef={devRef}
-              open={users.length && document.activeElement === devRef.current}
-              onInput={(e: any) => searchUsers(e.target.value)}
-              options={users}
-              getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
-              loading={loading}
-              label='Assign developer'
-              className={classes.assignField}
-              onClose={() => setUsers([])}
-              onChange={(e, value) => {
-                setAssignedDev(value?._id);
-                setUsers([]);
-              }}
-            />
-            <Autocomplete
-              autoRef={testerRef}
-              open={users.length && document.activeElement === testerRef.current}
-              onInput={(e: any) => searchUsers(e.target.value)}
-              options={users}
-              getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
-              loading={loading}
-              label='Assign tester'
-              className={classes.assignField}
-              onClose={() => setUsers([])}
-              onChange={(e, value) => {
-                setAssignedTester(value?._id);
-                setUsers([]);
-              }}
-            />
-            <Autocomplete
-              autoRef={managerRef}
-              open={users.length && document.activeElement === managerRef.current}
-              onInput={(e: any) => searchUsers(e.target.value)}
-              options={users}
-              getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
-              loading={loading}
-              label='Assign manager'
-              className={classes.assignField}
-              onClose={() => setUsers([])}
-              onChange={(e, value) => {
-                setAssignedManager(value?._id);
-                setUsers([]);
-              }}
-            />
-            </div>
             <div className={classes.filesSection}>
-              <Typography className='bold'>Add Files</Typography>
+              <div className={classes.label}>
+                <Typography className='bold'>Ticket Details</Typography>
+              </div>
+              
+              <TextField
+                select
+                variant='outlined'
+                size='small'
+                className={classes.assignField}
+                label='Priority'
+                value={ticketPriority}
+                onChange={e => setTicketPriority(e.target.value)}
+              >
+                {priority.map(p => (
+                  <MenuItem value={p.value}>{p.label}</MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                select
+                variant='outlined'
+                size='small'
+                label='Status'
+                className={classes.assignField}
+                value={ticketStatus}
+                onChange={e => setTicketStatus(e.target.value)}
+              >
+
+                {project.workflow.map(status => (
+                  <MenuItem value={status._id}>{status.name}</MenuItem>
+                ))}
+
+              </TextField>
+            </div>
+            <div className={classes.assignSection}>
+              <div className={classes.label}>
+                <Typography className='bold'>Assign</Typography>
+              </div>
+              <Autocomplete
+                autoRef={devRef}
+                open={users.length && document.activeElement === devRef.current}
+                onInput={(e: any) => searchUsers(e.target.value)}
+                options={users}
+                getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
+                loading={loading}
+                label='Assign developer'
+                className={classes.assignField}
+                onClose={() => setUsers([])}
+                onChange={(e, value) => {
+                  setAssignedDev(value?._id);
+                  setUsers([]);
+                }}
+              />
+              <Autocomplete
+                autoRef={testerRef}
+                open={users.length && document.activeElement === testerRef.current}
+                onInput={(e: any) => searchUsers(e.target.value)}
+                options={users}
+                getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
+                loading={loading}
+                label='Assign tester'
+                className={classes.assignField}
+                onClose={() => setUsers([])}
+                onChange={(e, value) => {
+                  setAssignedTester(value?._id);
+                  setUsers([]);
+                }}
+              />
+              <Autocomplete
+                autoRef={managerRef}
+                open={users.length && document.activeElement === managerRef.current}
+                onInput={(e: any) => searchUsers(e.target.value)}
+                options={users}
+                getOptionLabel={(option: User) => `${option.firstName} ${option.lastName}`}
+                loading={loading}
+                label='Assign manager'
+                className={classes.assignField}
+                onClose={() => setUsers([])}
+                onChange={(e, value) => {
+                  setAssignedManager(value?._id);
+                  setUsers([]);
+                }}
+              />
             </div>
           </div>
           

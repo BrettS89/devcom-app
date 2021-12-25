@@ -4,7 +4,7 @@ import {
 import _ from 'lodash';
 import api from '../../api';
 import { ActionTypes } from '../actions';
-import { ChannelMembers, Channels, DMs, User, Tickets } from '../../types/services';
+import { ChannelMembers, Channels, DMs, User, Tickets, Workflows } from '../../types/services';
 import { sleep } from '../../utilities';
 
 export default [
@@ -56,15 +56,23 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
             { assigneeUserId: user._id, },
             { assignerUserId: user._id, },
           ],
-          $sort: {
-            _id: -1,
-          },
+          $sort: { _id: -1 },
           $resolve: {
             assigner: true,
             assignee: true,
             tester: true,
             messages: true,
           },
+        },
+      });
+
+    const getBacklog = () => api
+      .service('project/ticket')
+      .find({
+        query: {
+          accountId: user.accountId,
+          $limit: 100,
+          $sort: { _id: -1 },
         },
       });
 
@@ -97,13 +105,21 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
         },
       });
 
+    const getWorkflow = () => api
+      .service('project/workflow')
+      .find({
+        query: {
+          accountId: user.accountId,
+        },
+      });
+
     const tickets: Tickets = yield call(getTickets);
+    const backlog: Tickets = yield call(getBacklog);
     const memberChannels: ChannelMembers = yield call(getJoinedChannels);
     const ids = memberChannels.data.map((ch) => ch.channelId);
     const channels: Channels = yield call(() => getChannels(ids));
     const dms: DMs = yield call(getDms);
-
-    console.log(dms);
+    const workflows: Workflows = yield call(getWorkflow);
 
     payload.navigate(payload.path);
 
@@ -133,8 +149,21 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     }
 
     yield put({
+      type: ActionTypes.SET_BACKLOG,
+      payload: {
+        data: backlog.data,
+        count: backlog.total,
+      },
+    });
+
+    yield put({
       type: ActionTypes.SET_USER,
       payload: user,
+    });
+
+    yield put({
+      type: ActionTypes.SET_WORKFLOW,
+      payload: workflows.data,
     });
 
     yield put({

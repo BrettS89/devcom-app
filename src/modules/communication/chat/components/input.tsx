@@ -4,8 +4,6 @@ import { marked } from 'marked';
 const Input = () => {
   const [markdown, setMarkdown] = React.useState('');
 
-  console.log(marked.parse(markdown));
-
   return (
     <>
     <div

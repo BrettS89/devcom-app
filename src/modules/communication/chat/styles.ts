@@ -125,7 +125,13 @@ export const useStyles = makeStyles({
     alignItems: 'center',
   },
   ticketAssign: {
+    display: 'flex',
+    alignItems: 'center',
     marginBottom: 15,
+  },
+  ticketAssignLabel: {
+    fontWeight: 700,
+    width: 100,
   },
   description: {
     marginTop: 10,

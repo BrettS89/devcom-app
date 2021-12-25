@@ -58,10 +58,17 @@ const Header = (props: any) => {
 
         <Button
           className={classes.link}
-          onClick={() => navigate('/chat')}
+          onClick={() => navigate('/project')}
           size='large'
         >
-          Tickets
+          Project
+        </Button>
+        <Button
+          className={classes.link}
+          onClick={() => navigate('/project')}
+          size='large'
+        >
+          Settings
         </Button>
         <Button
           className={classes.link}
@@ -77,13 +84,6 @@ const Header = (props: any) => {
         >
           <FontAwesomeIcon icon={faUser} style={{ fontSize: 22, color: '#3a48b3' }} />
         </Button>
-
-        {/* <div
-          className={`hover ${classes.userIcon}`}
-          onClick={() => navigate('/chat')}
-        >
-          <FontAwesomeIcon icon={faUser} style={{ fontSize: 20, color: '#3a48b3' }} />
-        </div> */}
       </div>
     )
   };

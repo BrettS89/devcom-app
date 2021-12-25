@@ -84,3 +84,13 @@ export interface DM extends Partial<Resource> {
 }
 
 export type DMs = Paginated<DM>;
+
+export interface Workflow extends Partial<Resource> {
+  accountId: string;
+  projectId?: string;
+  name: string;
+  order: number;
+  status: string;
+}
+
+export type Workflows = Paginated<Workflow>;

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode, faCommentAlt, faFileCode, faImage, faPaperclip, faPaperPlane, faUser } from '@fortawesome/free-solid-svg-icons'
-import { communicationSelector, ActionTypes } from '../../../redux';
+import { communicationSelector, ActionTypes, projectSelector } from '../../../redux';
 import { useStyles } from './styles';
 import { getActiveConversation } from './utility';
 import Message from './components/message';
@@ -17,6 +17,7 @@ const Chat = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const communication = useSelector(communicationSelector);
+  const project = useSelector(projectSelector);
   let chatEnd = useRef();
   const [messageText, setMessageText] = useState('');
   const [enterPressed, setEnterPressed] = useState<boolean>(false);
@@ -179,6 +180,7 @@ const Chat = () => {
         active={communication.active}
         ticket={activeConversation}
         patchTicket={patchTicket}
+        project={project}
       />
     </div>
   )

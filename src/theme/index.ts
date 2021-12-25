@@ -19,7 +19,6 @@ export const theme = createTheme({
   overrides: {
     MuiButton: {
       root: {
-        borderRadius: 10,
         fontFamily: "\"Proxima Nova\", sans-serif",
       }, 
     },
@@ -30,7 +29,6 @@ export const theme = createTheme({
     },
     MuiOutlinedInput: {
       root: {
-        // borderRadius: 10,
       }
     }
   }, 
