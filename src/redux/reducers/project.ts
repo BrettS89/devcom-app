@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { Ticket, Workflow } from '../../types/services';
+import { Ticket, Workflow, Sprint } from '../../types/services';
 import { ActionTypes } from '../actions';
 
 interface Action {
@@ -13,6 +13,7 @@ export interface ProjectState {
      count: number;
    },
    workflow: Workflow[];
+   sprints: Sprint[];
 }
 
 const INITIAL_STATE: ProjectState = {
@@ -21,6 +22,7 @@ const INITIAL_STATE: ProjectState = {
     count: 0,
   },
   workflow: [],
+  sprints: [],
 };
 
 export const projectReducer: Reducer<ProjectState, Action> = (state = INITIAL_STATE, { type, payload }) => {
@@ -35,6 +37,12 @@ export const projectReducer: Reducer<ProjectState, Action> = (state = INITIAL_ST
       return {
         ...state,
         workflow: payload,
+      };
+
+    case ActionTypes.SET_SPRINTS:
+      return {
+        ...state,
+        sprints: payload,
       };
 
     default:

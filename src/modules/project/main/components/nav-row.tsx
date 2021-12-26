@@ -5,6 +5,7 @@ import { useStyles } from '../styles';
 
 interface Props {
   name: string;
+  setComponent(): void;
 }
 
 const iconMap = {
@@ -14,11 +15,11 @@ const iconMap = {
   Sprints: faCalendarAlt,
 };
 
-const NavRow: React.FC<Props> = ({ name }) => {
+const NavRow: React.FC<Props> = ({ name, setComponent }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.navRow}>
+    <div className={classes.navRow} onClick={setComponent}>
       <div style={{ width: 25 }}>
         <FontAwesomeIcon icon={iconMap[name]} />
       </div>

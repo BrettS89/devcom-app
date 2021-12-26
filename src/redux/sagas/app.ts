@@ -4,7 +4,7 @@ import {
 import _ from 'lodash';
 import api from '../../api';
 import { ActionTypes } from '../actions';
-import { ChannelMembers, Channels, DMs, User, Tickets, Workflows } from '../../types/services';
+import { ChannelMembers, Channels, DMs, User, Sprints, Tickets, Workflows } from '../../types/services';
 import { sleep } from '../../utilities';
 
 export default [
@@ -113,6 +113,14 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
         },
       });
 
+    const getSprints = () => api
+      .service('project/sprint')
+      .find({
+        query: {
+          accountId: user.accountId,
+        },
+      });
+
     const tickets: Tickets = yield call(getTickets);
     const backlog: Tickets = yield call(getBacklog);
     const memberChannels: ChannelMembers = yield call(getJoinedChannels);
@@ -120,6 +128,7 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     const channels: Channels = yield call(() => getChannels(ids));
     const dms: DMs = yield call(getDms);
     const workflows: Workflows = yield call(getWorkflow);
+    const sprints: Sprints = yield call(getSprints);
 
     payload.navigate(payload.path);
 
@@ -169,6 +178,11 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     yield put({
       type: ActionTypes.SET_INITIALIZED,
       payload: true,
+    });
+
+    yield put({
+      type: ActionTypes.SET_SPRINTS,
+      payload: sprints.data,
     });
 
   } catch(e) {

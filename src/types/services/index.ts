@@ -94,3 +94,13 @@ export interface Workflow extends Partial<Resource> {
 }
 
 export type Workflows = Paginated<Workflow>;
+
+export interface Sprint extends Partial<Resource> {
+  accountId: string;
+  projectId: string;
+  name: string;
+  startAt?: string;
+  endAt?: string;
+}
+
+export type Sprints = Paginated<Sprint>;

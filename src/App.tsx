@@ -9,6 +9,8 @@ import Router from './routing';
 import { ActionTypes, appSelector } from './redux';
 import { useStyles } from './style';
 import './App.css';
+import 'react-datepicker/dist/react-datepicker.css'
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignature } from '@fortawesome/free-solid-svg-icons'
