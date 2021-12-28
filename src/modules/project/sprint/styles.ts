@@ -7,8 +7,10 @@ export const useStyles = makeStyles({
     flex: 1,
     padding: 20,
   },
-  pageTitle: {
-    marginBottom: 10,
+  pageTopRow: {
+    marginBottom: 5,
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   sprintIcon: {
     width: 50,
@@ -23,5 +25,8 @@ export const useStyles = makeStyles({
   },
   dateAt: {
     width: 80,
+  },
+  projectField: {
+    width: 200,
   }
 });

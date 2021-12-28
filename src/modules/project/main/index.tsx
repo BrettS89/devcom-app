@@ -27,7 +27,7 @@ const ProjectMain = () => {
       <div className={classes.leftNav}>
         <NavRow name='Backlog' setComponent={() => setComponent('backlog')} />
         <NavRow name='Board' setComponent={() => setComponent('backlog')} />
-        <NavRow name='Active Sprint' setComponent={() => setComponent('backlog')} />
+        <NavRow name='Active Sprints' setComponent={() => setComponent('backlog')} />
         <NavRow name='Sprints' setComponent={() => setComponent('sprint')} />
       </div>
       

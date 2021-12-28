@@ -36,15 +36,29 @@ const CreateTicket = () => {
 
   const [ticketPriority, setTicketPriority] = useState(undefined);
   const [ticketStatus, setTicketStatus] = useState(undefined);
+  const [ticketSprint, setTicketSprint] = useState(undefined);
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const clearForm = () => {
+    setName('');
+    setDescription('');
+    setAssignedTester(undefined);
+    setAssignedManager(undefined);
+    setAssignedDev(undefined);
+    setTicketPriority(undefined);
+    setTicketStatus(undefined);
+    setTicketSprint(undefined);
+  };
 
   const closeModal = () => {
     dispatch({
       type: ActionTypes.SET_CREATE_TICKET_MODAL_OPEN,
       payload: false,
-    })
+    });
+
+    clearForm();
   }
 
   const searchUsers = _.debounce(async (term: string) => {
@@ -79,8 +93,17 @@ const CreateTicket = () => {
         assigneeUserId: assignedDev,
         testerUserId: assignedTester,
         priority: ticketPriority || project.workflow[0]._id,
-        status: ticketStatus,
+        statusId: ticketStatus,
+        sprintId: ticketSprint,
       },
+    });
+
+    clearForm();
+  };
+
+  const filterSprints = () => {
+    return project.sprints.filter(sprint => {
+      return sprint.endAt > new Date().toISOString();
     });
   };
 
@@ -153,6 +176,22 @@ const CreateTicket = () => {
                 ))}
 
               </TextField>
+
+              <TextField
+                select
+                variant='outlined'
+                size='small'
+                label='Sprint'
+                className={classes.assignField}
+                value={ticketSprint}
+                onChange={e => setTicketSprint(e.target.value)}
+              >
+
+                {filterSprints(project.sprints).map(sprint => (
+                  <MenuItem value={sprint._id}>{sprint.name}</MenuItem>
+                ))}
+
+              </TextField>
             </div>
             <div className={classes.assignSection}>
               <div className={classes.label}>
@@ -216,7 +255,6 @@ const CreateTicket = () => {
             Create Ticket
           </Button>
           </div>
-          
 
         </div>
       </div>

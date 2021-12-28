@@ -11,11 +11,12 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark, faBug } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 
 import { projectSelector, ActionTypes } from '../../../redux';
 import { useStyles } from './styles';
 import { getRows } from './utilities';
+import { priority } from '../../../config';
 
 const Backlog = () => {
   const classes = useStyles();
@@ -45,14 +46,17 @@ const Backlog = () => {
         <Table size='medium'>
           <TableBody>
             {tickets.map(ticket => {
+              const ticketPriority = priority.find(p => p.value === ticket.priority);
+
               return (
                 <TableRow key={ticket._id}>
                   <TableCell align="left" className={classes.status}>
                     <FontAwesomeIcon icon={faBookmark} style={{ fontSize: 20, color: '#505999' }} />
                   </TableCell>
                   <TableCell align="left" className={classes.name}><Typography>{ticket.name}</Typography></TableCell>
-                  <TableCell align="left"><Typography>Test</Typography></TableCell>
-                  <TableCell align="left"><Typography>Test</Typography></TableCell>
+                  <TableCell align="left"><Typography>{ticket.sprint?.name}</Typography></TableCell>
+                  <TableCell align="left"><Typography>{ticket.status?.name}</Typography></TableCell>
+                  <TableCell align="left"><Typography>{ticketPriority?.label}</Typography></TableCell>
                 </TableRow>
               );
             })}

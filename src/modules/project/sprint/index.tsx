@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
@@ -54,9 +55,16 @@ const Sprint = () => {
 
   return (
     <div className={classes.container}>
-      <Typography className={`bold ${classes.pageTitle}`} variant='h5'>
-        Sprints
-      </Typography>
+      <div className={classes.pageTopRow}>
+        <Typography className={`bold`} variant='h5'>
+          Sprints
+        </Typography>
+        <Button variant='outlined' color='primary'>
+          Add Sprint
+        </Button>
+      </div>
+
+      
       
       <div className={classes.content}>
       {renderTable()}

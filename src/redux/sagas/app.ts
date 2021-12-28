@@ -62,6 +62,8 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
             assignee: true,
             tester: true,
             messages: true,
+            sprint: true,
+            status: true,
           },
         },
       });
@@ -73,6 +75,13 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
           accountId: user.accountId,
           $limit: 100,
           $sort: { _id: -1 },
+          $resolve: {
+            assigner: true,
+            assignee: true,
+            tester: true,
+            sprint: true,
+            status: true,
+          },
         },
       });
 
@@ -131,6 +140,8 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     const sprints: Sprints = yield call(getSprints);
 
     payload.navigate(payload.path);
+
+    console.log(tickets.data);
 
     yield put({
       type: ActionTypes.SET_COMMUNICATION_TICKETS,

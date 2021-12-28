@@ -4,6 +4,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import DatePicker from 'react-datepicker';
+import Switch from '@material-ui/core/Switch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons'
 
@@ -32,13 +33,27 @@ const SprintRow: React.FC<Props> = ({ sprint }) => {
     });
   };
 
+  const updateIsActive = (event: any) => {
+    console.log(event.target.checked);
+
+    dispatch({
+      type: ActionTypes.PATCH_SPRINT,
+      payload: {
+        _id: sprint._id,
+        data: {
+          active: event.target.checked,
+        },
+      },
+    });
+  }
+
   return (
     <TableRow key={sprint._id}>
       <TableCell align="left" className={classes.sprintIcon}>
         <FontAwesomeIcon icon={faFeatherAlt} style={{ fontSize: 20, color: '#505999' }} />
       </TableCell>
       <TableCell align="left"><Typography>{sprint.name}</Typography></TableCell>
-      <TableCell align="left"><Typography>Project</Typography></TableCell>
+      <TableCell align="left" className={classes.projectField}><Typography>Project</Typography></TableCell>
       <TableCell align="left">
         <div className={classes.dateField}>
           <Typography className={classes.dateAt}>Start at </Typography>
@@ -64,7 +79,13 @@ const SprintRow: React.FC<Props> = ({ sprint }) => {
           />
         </div>
       </TableCell>
-      <TableCell align="left"><Typography>Status</Typography></TableCell>
+      <TableCell align="left">
+        <Switch
+          checked={sprint.active}
+          color='primary'
+          onChange={updateIsActive}
+        />
+      </TableCell>
     </TableRow>
   );
 };

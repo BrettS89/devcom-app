@@ -9,7 +9,7 @@ interface Props {
 }
 
 const iconMap = {
-  'Active Sprint': faFeatherAlt,
+  'Active Sprints': faFeatherAlt,
   Board: faColumns,
   Backlog: faAlignJustify,
   Sprints: faCalendarAlt,

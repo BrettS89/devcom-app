@@ -50,10 +50,10 @@ const Ticket: React.FC<Props> = ({ active, patchTicket, ticket, project }) => {
             <TextField select
               variant='outlined'
               size='small'
-              value={ticket.status}
+              value={ticket.statusId}
               className={classes.statusDropdown}
               onChange={e => {
-                patchTicket(ticket?._id, { status: e.target.value });
+                patchTicket(ticket?._id, { statusId: e.target.value });
                   e.currentTarget.blur();                
               }}
             >

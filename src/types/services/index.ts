@@ -48,13 +48,16 @@ export interface Ticket extends Partial<Resource> {
   assignerUserId: string;
   assigneeUserId?: string;
   testerUserId?: string;
-  status: string;
+  statusId: string;
   name: string;
+  priority: number;
   description?: string;
   messages?: Message[]
   assigner?: User;
   assignee?: User;
   tester?: User;
+  sprint?: Sprint;
+  status?: Workflow;
 }
 
 export type Tickets = Paginated<Ticket>
@@ -96,6 +99,7 @@ export interface Workflow extends Partial<Resource> {
 export type Workflows = Paginated<Workflow>;
 
 export interface Sprint extends Partial<Resource> {
+  active: boolean;
   accountId: string;
   projectId: string;
   name: string;

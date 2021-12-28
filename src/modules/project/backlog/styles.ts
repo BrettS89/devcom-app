@@ -14,6 +14,6 @@ export const useStyles = makeStyles({
     width: 50,
   },
   name: {
-    width: '60%',
+    width: '40%',
   }
 });

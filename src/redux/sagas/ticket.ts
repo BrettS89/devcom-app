@@ -32,7 +32,8 @@ interface CreateTicketProps {
     assigneeUserId?: string;
     testerUserId?: string;
     priority?: number;
-    status: string;
+    statusId: string;
+    sprintId: string;
   }
 }
 
@@ -49,7 +50,8 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
       assignerUserId: user?.details?._id,
       assigneeUserId: payload.assigneeUserId,
       testerUserId: payload.testerUserId,
-      status: payload.status,
+      statusId: payload.statusId,
+      sprintId: payload.sprintId,
       priority: payload.priority || 3,
     };
 
@@ -62,6 +64,8 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
             assignee: true,
             tester: true,
             messages: true,
+            sprint: true,
+            status: true,
           },
         }
       });
@@ -107,6 +111,7 @@ interface PatchTicketProps {
 function * patchTicketHandler({ payload }: PatchTicketProps) {
   try {
     const communication: StoreState['communication'] = yield select(communicationSelector);
+    const project: StoreState['project'] = yield select(projectSelector);
 
     const patchTicket = () => api
       .service('project/ticket')
@@ -117,13 +122,15 @@ function * patchTicketHandler({ payload }: PatchTicketProps) {
             assignee: true,
             tester: true,
             messages: true,
-          }
-        }
+            sprint: true,
+            status: true,
+          },
+        },
       });
 
     const patchedTicket: Ticket = yield call(patchTicket);
-
     const tickets = _.cloneDeep(communication.tickets);
+    const backlog = _.cloneDeep(project.backlog);
 
     const updatedTickets = tickets.map(ticket => {
       return ticket._id === patchedTicket._id
@@ -131,9 +138,25 @@ function * patchTicketHandler({ payload }: PatchTicketProps) {
         : ticket;
     });
 
+    const updatedBacklog = backlog.data.map(ticket => {
+      delete ticket.messages;
+
+      return ticket._id === patchedTicket._id
+        ? patchedTicket
+        : ticket
+    });
+
     yield put({
       type: ActionTypes.SET_COMMUNICATION_TICKETS,
       payload: updatedTickets,
+    });
+
+    yield put({
+      type: ActionTypes.SET_BACKLOG,
+      payload: {
+        data: updatedBacklog,
+        count: backlog.count,
+      },
     });
   } catch(e) {
     console.log(e);
