@@ -27,5 +27,6 @@ export const store = () => {
 // SELECTORS
 export const appSelector = (state: StoreState) => state.app;
 export const communicationSelector = (state: StoreState) => state.communication;
+export const filterSelector = (state: StoreState) => state.filter;
 export const projectSelector = (state: StoreState) => state.project;
 export const userSelector = (state: StoreState) => state.user;

@@ -7,13 +7,17 @@ export const useStyles = makeStyles({
     flex: 1,
     padding: 20,
   },
-  pageTitle: {
+  topRow: {
     marginBottom: 10,
+    display: 'flex',
   },
   status: {
     width: 50,
   },
   name: {
     width: '40%',
-  }
+  },
+  filters: {
+    marginLeft: 30,
+  },
 });

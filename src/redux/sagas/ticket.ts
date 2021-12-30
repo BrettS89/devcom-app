@@ -3,11 +3,12 @@ import {
 } from 'redux-saga/effects';
 import _ from 'lodash';
 import api from '../../api';
-import { ActionTypes, communicationSelector, userSelector, StoreState, projectSelector } from '../index';
+import { ActionTypes, communicationSelector, filterSelector, userSelector, StoreState, projectSelector } from '../index';
 import { Ticket, Tickets } from '../../types/services';
 
 export default [
   createTicketWatcher,
+  fetchBacklogWatcher,
   patchTicketWatcher,
   fetchMoreTicketsWatcher,
 ];
@@ -18,6 +19,10 @@ function * patchTicketWatcher() {
 
 function * createTicketWatcher() {
   yield takeLatest(ActionTypes.CREATE_TICKET, createTicketHandler);
+}
+
+function * fetchBacklogWatcher() {
+  yield takeLatest(ActionTypes.FETCH_BACKLOG, fetchBacklogHandler);
 }
 
 function * fetchMoreTicketsWatcher() {
@@ -196,6 +201,54 @@ function * fetchMoreTicketsHandler({ payload }: FetchMoreProps) {
       type: ActionTypes.SET_BACKLOG,
       payload: backlog,
     });
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+function * fetchBacklogHandler() {
+  try {
+    const filters: StoreState['filter'] = yield select(filterSelector);
+
+    const statusId = filters.backlog.status.map(s => s._id);
+    const priority = filters.backlog.priorities;
+
+    console.log(priority);
+
+    const query = {
+      priority,
+      statusId: { $in: statusId },
+      $resolve: {
+        assigner: true,
+        assignee: true,
+        tester: true,
+        messages: true,
+        sprint: true,
+        status: true,
+      },
+    };
+
+    //@ts-ignore
+    if (!statusId.length) delete query.statusId;
+    //@ts-ignore
+    if (!priority.length) delete query.priority;
+
+    const fn = () => api
+      .service('project/ticket')
+      .find({
+        query,
+      });
+
+    const tickets: Tickets = yield call(fn);
+
+    yield put({
+      type: ActionTypes.SET_BACKLOG,
+      payload: {
+        data: tickets.data,
+        count: tickets.data.length,
+      },
+    });
+
   } catch(e) {
     console.log(e);
   }
