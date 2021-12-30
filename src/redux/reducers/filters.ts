@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { Ticket, Workflow, Sprint } from '../../types/services';
 import { ActionTypes } from '../actions';
 
 interface Action {
@@ -9,20 +8,28 @@ interface Action {
 
 export interface FilterState {
    backlog: {
-     sprint?: string;
+     sprint: {
+       _id: string;
+       name: string;
+     }[];
      status: {
        _id: string;
        name: string;
      }[];
      priorities: number[];
+     type: {
+       _id: string;
+       name: string;
+     }[];
    },
 }
 
 const INITIAL_STATE: FilterState = {
   backlog: {
-    sprint: undefined,
+    sprint: [],
     status: [],
     priorities: [],
+    type: [],
   },
 };
 

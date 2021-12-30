@@ -4,7 +4,7 @@ import {
 import _ from 'lodash';
 import api from '../../api';
 import { ActionTypes } from '../actions';
-import { ChannelMembers, Channels, DMs, User, Sprints, Tickets, Workflows } from '../../types/services';
+import { ChannelMembers, Channels, DMs, User, Sprints, Tickets, Workflows, TicketTypes } from '../../types/services';
 import { sleep } from '../../utilities';
 
 export default [
@@ -47,6 +47,14 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
         },
       });
 
+    const getTicketTypes = () => api
+      .service('project/ticket-type')
+      .find({
+        query: {
+          accountId: user.accountId,
+        },
+      });
+
     const getTickets = () => api
       .service('project/ticket')
       .find({
@@ -64,6 +72,7 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
             messages: true,
             sprint: true,
             status: true,
+            type: true,
           },
         },
       });
@@ -81,6 +90,7 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
             tester: true,
             sprint: true,
             status: true,
+            type: true,
           },
         },
       });
@@ -138,10 +148,9 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     const dms: DMs = yield call(getDms);
     const workflows: Workflows = yield call(getWorkflow);
     const sprints: Sprints = yield call(getSprints);
+    const ticketTypes: TicketTypes = yield call(getTicketTypes);
 
     payload.navigate(payload.path);
-
-    console.log(tickets.data);
 
     yield put({
       type: ActionTypes.SET_COMMUNICATION_TICKETS,
@@ -167,6 +176,11 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
         },
       });
     }
+
+    yield put({
+      type: ActionTypes.SET_TICKET_TYPES,
+      payload: ticketTypes.data,
+    });
 
     yield put({
       type: ActionTypes.SET_BACKLOG,

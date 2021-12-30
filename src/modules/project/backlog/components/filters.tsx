@@ -17,15 +17,23 @@ const Filters = () => {
   const project = useSelector(projectSelector);
   const filter = useSelector(filterSelector);
 
+  const sprints = [];
+
   const findPriorityLabel = (n: number): string => {
     return priority.find(p => p.value === n)?.label || ' ';
   }
 
-  const onStatusChange = (name: string, value?: string, ) => {
+  const filterSprints = () => {
+    return project.sprints.filter(sprint => {
+      return sprint.endAt! > new Date().toISOString();
+    });
+  };
+
+  const onChange = (name: string, field: string, value?: string, ) => {
     dispatch({
       type: ActionTypes.UPDATE_BACKLOG_FILTER,
       payload: {
-        field: 'status',
+        field,
         value,
         name,
       },
@@ -45,21 +53,45 @@ const Filters = () => {
   return (
     <div className={classes.filters}>
       <FormControl style={{ width: 200, marginTop: 0 }} margin='dense' variant='outlined'>
+        <InputLabel id="type-backlog-filter" margin='dense'>Type</InputLabel>
+        <Select
+          labelId="type-backlog-filter"
+          label='Type'
+          multiple
+          value={filter.backlog.sprint}
+          input={<OutlinedInput margin='dense' label='Type' />}
+          //@ts-ignore
+          renderValue={(selected) => selected.map(s => s.name).join(', ')}
+        >
+          {project.ticketType.map((type) => (
+            <MenuItem key={type._id} value={type._id}>
+              <Checkbox
+                onChange={() => onChange(type.name, 'type', type._id)}
+                checked={!!filter.backlog.type.find(s => s._id === type._id)}
+                color='primary' name={type.name}
+              />
+              <ListItemText primary={type.name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl style={{ width: 200, marginTop: 0, marginLeft: 10 }} margin='dense' variant='outlined'>
         <InputLabel id="sprint-backlog-filter" margin='dense'>Sprint</InputLabel>
         <Select
           labelId="sprint-backlog-filter"
           label='Sprint'
           multiple
-          value={filter.backlog.status}
+          value={filter.backlog.sprint}
           input={<OutlinedInput margin='dense' label='Sprint' />}
           //@ts-ignore
           renderValue={(selected) => selected.map(s => s.name).join(', ')}
         >
-          {project.sprints.map((sprint) => (
+          {filterSprints().map((sprint) => (
             <MenuItem key={sprint._id} value={sprint._id}>
               <Checkbox
-                // onChange={() => onStatusChange(sprint.name, sprint._id)}
-                checked={!!filter.backlog.status.find(s => s._id === sprint._id)}
+                onChange={() => onChange(sprint.name, 'sprint', sprint._id)}
+                checked={!!filter.backlog.sprint.find(s => s._id === sprint._id)}
                 color='primary' name={sprint.name}
               />
               <ListItemText primary={sprint.name} />
@@ -82,7 +114,7 @@ const Filters = () => {
           {project.workflow.map((status) => (
             <MenuItem key={status._id} value={status._id}>
               <Checkbox
-                onChange={() => onStatusChange(status.name, status._id)}
+                onChange={() => onChange(status.name, 'status', status._id)}
                 checked={!!filter.backlog.status.find(s => s._id === status._id)}
                 color='primary' name={status.name}
               />

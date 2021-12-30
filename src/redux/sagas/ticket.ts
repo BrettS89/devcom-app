@@ -39,6 +39,7 @@ interface CreateTicketProps {
     priority?: number;
     statusId: string;
     sprintId: string;
+    typeId: string;
   }
 }
 
@@ -58,6 +59,7 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
       statusId: payload.statusId,
       sprintId: payload.sprintId,
       priority: payload.priority || 3,
+      typeId: payload.typeId,
     };
 
     const createTicket = () => api
@@ -71,8 +73,9 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
             messages: true,
             sprint: true,
             status: true,
+            type: true,
           },
-        }
+        },
       });
 
     const createdTicket: Ticket = yield call(createTicket);
@@ -129,6 +132,7 @@ function * patchTicketHandler({ payload }: PatchTicketProps) {
             messages: true,
             sprint: true,
             status: true,
+            type: true,
           },
         },
       });
@@ -190,6 +194,15 @@ function * fetchMoreTicketsHandler({ payload }: FetchMoreProps) {
           $skip: project.backlog.data.length,
           $limit: payload,
           $sort: { _id: -1 },
+          $resolve: {
+            assigner: true,
+            assignee: true,
+            tester: true,
+            messages: true,
+            sprint: true,
+            status: true,
+            type: true,
+          },
         },
       });
 
@@ -211,13 +224,15 @@ function * fetchBacklogHandler() {
     const filters: StoreState['filter'] = yield select(filterSelector);
 
     const statusId = filters.backlog.status.map(s => s._id);
+    const sprintId = filters.backlog.sprint.map(s => s._id);
+    const typeId = filters.backlog.type.map(t => t._id);
     const priority = filters.backlog.priorities;
-
-    console.log(priority);
 
     const query = {
       priority,
       statusId: { $in: statusId },
+      sprintId: { $in: sprintId },
+      typeId: { $in: typeId },
       $resolve: {
         assigner: true,
         assignee: true,
@@ -225,6 +240,7 @@ function * fetchBacklogHandler() {
         messages: true,
         sprint: true,
         status: true,
+        type: true,
       },
     };
 
@@ -232,6 +248,10 @@ function * fetchBacklogHandler() {
     if (!statusId.length) delete query.statusId;
     //@ts-ignore
     if (!priority.length) delete query.priority;
+    //@ts-ignore
+    if (!sprintId.length) delete query.sprintId;
+    //@ts-ignore
+    if (!typeId.length) delete query.typeId;
 
     const fn = () => api
       .service('project/ticket')

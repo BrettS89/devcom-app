@@ -37,6 +37,7 @@ const CreateTicket = () => {
   const [ticketPriority, setTicketPriority] = useState(undefined);
   const [ticketStatus, setTicketStatus] = useState(undefined);
   const [ticketSprint, setTicketSprint] = useState(undefined);
+  const [ticketType, setTicketType] = useState(undefined); 
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ const CreateTicket = () => {
     setTicketPriority(undefined);
     setTicketStatus(undefined);
     setTicketSprint(undefined);
+    setTicketType(undefined);
   };
 
   const closeModal = () => {
@@ -95,6 +97,7 @@ const CreateTicket = () => {
         priority: ticketPriority || project.workflow[0]._id,
         statusId: ticketStatus,
         sprintId: ticketSprint,
+        typeId: ticketType,
       },
     });
 
@@ -146,6 +149,20 @@ const CreateTicket = () => {
               <div className={classes.label}>
                 <Typography className='bold'>Ticket Details</Typography>
               </div>
+
+              <TextField
+                select
+                variant='outlined'
+                size='small'
+                className={classes.assignField}
+                label='Type'
+                value={ticketType}
+                onChange={e => setTicketType(e.target.value)}
+              >
+                {project.ticketType.map(p => (
+                  <MenuItem value={p._id}>{p.name}</MenuItem>
+                ))}
+              </TextField>
               
               <TextField
                 select
