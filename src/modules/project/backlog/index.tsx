@@ -90,7 +90,7 @@ const Backlog = () => {
     <div className={classes.container}>
       <div className={classes.topRow}>
         <Typography className='bold' variant='h5'>
-          Backlog
+          Tickets
         </Typography>
         <Filters />
       </div>

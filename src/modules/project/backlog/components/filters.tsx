@@ -25,7 +25,7 @@ const Filters = () => {
 
   const filterSprints = () => {
     return project.sprints.filter(sprint => {
-      return sprint.endAt! > new Date().toISOString();
+      return sprint.endAt! > new Date().toISOString() || sprint.active;
     });
   };
 

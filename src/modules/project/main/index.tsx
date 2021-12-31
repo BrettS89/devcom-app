@@ -11,7 +11,7 @@ const ProjectMain = () => {
 
   const renderComponent = () => {
     switch(component) {
-      case 'backlog':
+      case 'tickets':
         return <Backlog />;
 
       case 'sprint':
@@ -25,9 +25,10 @@ const ProjectMain = () => {
   return (
     <div className={classes.container}>
       <div className={classes.leftNav}>
-        <NavRow name='Backlog' setComponent={() => setComponent('backlog')} />
-        <NavRow name='Board' setComponent={() => setComponent('backlog')} />
-        <NavRow name='Active Sprints' setComponent={() => setComponent('backlog')} />
+        <NavRow name='Tickets' setComponent={() => setComponent('tickets')} />
+        <NavRow name='Board' setComponent={() => setComponent('tickets')} />
+        {/* <NavRow name='Active Sprints' setComponent={() => setComponent('tickets')} /> */}
+        <NavRow name='Projects' setComponent={() => setComponent('project')} />
         <NavRow name='Sprints' setComponent={() => setComponent('sprint')} />
       </div>
       

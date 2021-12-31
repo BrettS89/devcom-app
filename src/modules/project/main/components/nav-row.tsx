@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAlignJustify, faColumns, faFeatherAlt, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { faAlignJustify, faColumns, faFeatherAlt, faCalendarAlt, faCube, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { useStyles } from '../styles';
 
 interface Props {
@@ -11,8 +11,9 @@ interface Props {
 const iconMap = {
   'Active Sprints': faFeatherAlt,
   Board: faColumns,
-  Backlog: faAlignJustify,
+  Tickets: faStickyNote,
   Sprints: faCalendarAlt,
+  Projects: faCube
 };
 
 const NavRow: React.FC<Props> = ({ name, setComponent }) => {
