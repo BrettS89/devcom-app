@@ -6,26 +6,24 @@ interface Action {
   payload: any
 }
 
+interface GenericFilterType {
+  _id: string;
+  name: string;
+}
+
 export interface FilterState {
    backlog: {
-     sprint: {
-       _id: string;
-       name: string;
-     }[];
-     status: {
-       _id: string;
-       name: string;
-     }[];
+     project: GenericFilterType[];
+     sprint: GenericFilterType[];
+     status: GenericFilterType[];
      priorities: number[];
-     type: {
-       _id: string;
-       name: string;
-     }[];
+     type: GenericFilterType[];
    },
 }
 
 const INITIAL_STATE: FilterState = {
   backlog: {
+    project: [],
     sprint: [],
     status: [],
     priorities: [],

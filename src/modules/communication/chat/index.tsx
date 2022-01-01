@@ -6,12 +6,11 @@ import TextField from '@material-ui/core/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode, faCommentAlt, faFileCode, faImage, faPaperclip, faPaperPlane, faUser } from '@fortawesome/free-solid-svg-icons'
 import { communicationSelector, ActionTypes, projectSelector } from '../../../redux';
+import { getProject } from '../../../utilities';
 import { useStyles } from './styles';
 import { getActiveConversation } from './utility';
 import Message from './components/message';
 import Ticket from './components/ticket';
-
-import Input from './components/input';
 
 const Chat = () => {
   const classes = useStyles();
@@ -72,12 +71,12 @@ const Chat = () => {
 
   const renderTickets = () => {
     return communication.tickets.map(ticket => {
-      const name = ticket.name.split(':')[0];
+      const ticketProject = getProject(ticket, project.project);
 
       return (
         <div className={classes.channel} key={ticket._id} onClick={() => setActive('ticket', ticket._id!)}>
           <FontAwesomeIcon style={{ color: '#f9f9f9', marginRight: 10 }} icon={faCommentAlt} />
-          <Typography color='secondary'>{name}</Typography>
+          <Typography color='secondary'>{ticketProject?.code}-{ticket.number}</Typography>
         </div>
       )
     });

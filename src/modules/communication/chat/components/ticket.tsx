@@ -7,6 +7,8 @@ import { faCommentAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useStyles } from '../styles';
 import { Ticket as TicketType, Channel, DM } from '../../../../types/services';
 import { ProjectState } from '../../../../redux/reducers/project';
+import { getProject } from '../../../../utilities';
+import { colors } from '../../../../styles/colors';
 
 interface Props {
   active: {
@@ -40,10 +42,14 @@ const Ticket: React.FC<Props> = ({ active, patchTicket, ticket, project }) => {
   };
 
   const renderTicket = () => {
+    const ticketProject = getProject(ticket, project.project);
+
     return (
       <div className={classes.ticketWindow}>
         <div className={classes.ticketWindowContent}>
-          <Typography variant='h6' className={classes.ticketTitle}>{ticket?.name}</Typography>
+          <Typography variant='h6' className={classes.ticketTitle}>
+            {ticketProject?.code}-{ticket?.number} {ticket?.name}
+          </Typography>
 
           <div className={classes.ticketStatus}>
             {/* <Typography>Status</Typography> */}
@@ -67,7 +73,7 @@ const Ticket: React.FC<Props> = ({ active, patchTicket, ticket, project }) => {
           <div className={classes.ticketAssign}>
             <Typography className={classes.ticketAssignLabel}>Assigner</Typography>
             <div className={classes.ticketUser}>
-              <FontAwesomeIcon style={{ color: '#ff535c', marginRight: 10 }} icon={faUser} />
+              <FontAwesomeIcon style={{ color: colors.red, marginRight: 10 }} icon={faUser} />
               <Typography>{ticket?.assigner?.firstName} {ticket?.assigner?.lastName}</Typography>
             </div>
           </div>
@@ -75,7 +81,7 @@ const Ticket: React.FC<Props> = ({ active, patchTicket, ticket, project }) => {
           <div className={classes.ticketAssign}>
             <Typography className={classes.ticketAssignLabel}>Assignee</Typography>
             <div className={classes.ticketUser}>
-              <FontAwesomeIcon style={{ color: '#ff535c', marginRight: 10 }} icon={faUser} />
+              <FontAwesomeIcon style={{ color: colors.red, marginRight: 10 }} icon={faUser} />
               <Typography>{ticket?.assignee?.firstName} {ticket?.assignee?.lastName}</Typography>
             </div>
           </div>
@@ -83,7 +89,7 @@ const Ticket: React.FC<Props> = ({ active, patchTicket, ticket, project }) => {
           <div className={classes.ticketAssign}>
             <Typography className={classes.ticketAssignLabel}>Tester</Typography>
             <div className={classes.ticketUser}>
-              <FontAwesomeIcon style={{ color: '#ff535c', marginRight: 10 }} icon={faUser} />
+              <FontAwesomeIcon style={{ color: colors.red, marginRight: 10 }} icon={faUser} />
               <Typography>{ticket?.tester?.firstName} {ticket?.tester?.lastName}</Typography>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { ActionTypes } from '../../redux';
 
 import { useStyles } from './styles';
+import { colors } from '../../styles/colors';
 
 const Header = (props: any) => {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const Header = (props: any) => {
           onClick={() => navigate('/chat')}
           size='large'
         >
-          <FontAwesomeIcon icon={faUser} style={{ fontSize: 22, color: '#3a48b3' }} />
+          <FontAwesomeIcon icon={faUser} style={{ fontSize: 22 }} />
         </Button>
       </div>
     )
@@ -92,7 +93,7 @@ const Header = (props: any) => {
     <AppBar elevation={0} color="secondary" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <div className={`${classes.leftItems} hover`} onClick={() => navigate('/')}>
-          <FontAwesomeIcon style={{ color: '#ff535c', fontSize: 36 }} icon={faSignature} />
+          <FontAwesomeIcon style={{ color: colors.red, fontSize: 36 }} icon={faSignature} />
           {/* <Typography className={classes.logo} color='secondary'>
             Live
           </Typography> */}

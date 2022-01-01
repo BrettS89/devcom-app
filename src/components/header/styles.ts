@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
   appBar: {
     height: 47
   },
@@ -18,7 +18,8 @@ export const useStyles = makeStyles({
   },
   leftItems: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    color: theme.palette.secondary.main,
   },
   rightItems: {
     display: 'flex',
@@ -29,12 +30,13 @@ export const useStyles = makeStyles({
     fontSize: 14,
   },
   link: {
-    color: '#3a48b3',
+    color: theme.palette.primary.main,
     marginLeft: 10,
     // fontWeight: 700,
   },
   userIcon: {
     marginLeft: 25,
+    color: theme.palette.primary.main,
   },
   planText: {
     paddingLeft: 8,
@@ -49,4 +51,4 @@ export const useStyles = makeStyles({
   planName: {
     fontStyle: 'italic',
   }
-});
+}));

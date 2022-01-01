@@ -11,20 +11,4 @@ export const useStyles = makeStyles({
     marginBottom: 0,
     display: 'flex',
   },
-  status: {
-    width: 50,
-  },
-  name: {
-    width: '40%',
-  },
-  filters: {
-    marginLeft: 16,
-  },
-  filter: {
-    width: 200,
-    marginTop: 0,
-    marginLeft: 5,
-    marginRight: 5,
-    marginBottom: 10,
-  }
 });

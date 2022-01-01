@@ -3,6 +3,7 @@ import { useStyles } from './styles';
 import NavRow from './components/nav-row';
 
 import Backlog from '../backlog';
+import Projects from '../project';
 import Sprint from '../sprint';
 
 const ProjectMain = () => {
@@ -16,6 +17,9 @@ const ProjectMain = () => {
 
       case 'sprint':
         return <Sprint />;
+
+      case 'project':
+        return <Projects />
 
       default:
         return <Backlog />;

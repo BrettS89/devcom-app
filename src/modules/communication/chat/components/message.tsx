@@ -14,7 +14,7 @@ const Message: React.FC<Props> = ({ message }) => {
   return (
     <div className={classes.message}>
       <div className={classes.messageIcon}>
-        <FontAwesomeIcon icon={faUser} style={{ fontSize: 34, color: '#3a48b3', paddingTop: 4 }} />
+        <FontAwesomeIcon icon={faUser} style={{ fontSize: 30, paddingTop: 4 }} />
       </div>
 
       <div>

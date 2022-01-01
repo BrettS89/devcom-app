@@ -4,7 +4,7 @@ import {
 import _ from 'lodash';
 import api from '../../api';
 import { ActionTypes } from '../actions';
-import { ChannelMembers, Channels, DMs, User, Sprints, Tickets, Workflows, TicketTypes } from '../../types/services';
+import { ChannelMembers, Channels, DMs, User, Sprints, Tickets, Workflows, TicketTypes, Projects } from '../../types/services';
 import { sleep } from '../../utilities';
 
 export default [
@@ -27,8 +27,6 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
   try {
     const token = localStorage.getItem('token');
 
-    yield sleep(500);
-
     if (!token) {
       throw new Error('No token');
     }
@@ -44,6 +42,14 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
       .find({
         query: {
           userId: user._id,
+        },
+      });
+
+    const getProjects = () => api
+      .service('project/project')
+      .find({
+        query: {
+          accountId: user.accountId,
         },
       });
 
@@ -149,6 +155,9 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
     const workflows: Workflows = yield call(getWorkflow);
     const sprints: Sprints = yield call(getSprints);
     const ticketTypes: TicketTypes = yield call(getTicketTypes);
+    const projects: Projects = yield call(getProjects);
+
+    console.log(projects)
 
     payload.navigate(payload.path);
 
@@ -176,6 +185,11 @@ function * initializeHandler({ payload }: InitializeHandlerProps) {
         },
       });
     }
+
+    yield put({
+      type: ActionTypes.SET_PROJECTS,
+      payload: projects.data,
+    });
 
     yield put({
       type: ActionTypes.SET_TICKET_TYPES,

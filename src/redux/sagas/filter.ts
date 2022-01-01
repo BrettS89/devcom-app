@@ -80,20 +80,36 @@ function * updateBacklogFilterHandler({ payload }: UpdateBacklogProps) {
       return;
 
       case 'type':
-      if (!backlogFilters.type.find(s => s._id === payload.value)) {
-        backlogFilters.type.push({ _id: payload.value, name: payload.name });
-      } else {
-        const updatedSprints = backlogFilters
-          .type
-          .filter(type => type._id !== payload.value);
+        if (!backlogFilters.type.find(s => s._id === payload.value)) {
+          backlogFilters.type.push({ _id: payload.value, name: payload.name });
+        } else {
+          const updatedSprints = backlogFilters
+            .type
+            .filter(type => type._id !== payload.value);
 
-        backlogFilters.type = updatedSprints;
-      }
-      yield put({
-        type: ActionTypes.SET_BACKLOG_FILTER,
-        payload: backlogFilters,
-      });
-      return;
+          backlogFilters.type = updatedSprints;
+        }
+        yield put({
+          type: ActionTypes.SET_BACKLOG_FILTER,
+          payload: backlogFilters,
+        });
+        return;
+
+      case 'project':
+        if (!backlogFilters.project.find(s => s._id === payload.value)) {
+          backlogFilters.project.push({ _id: payload.value, name: payload.name });
+        } else {
+          const updateProjects = backlogFilters
+            .project
+            .filter(project => project._id !== payload.value);
+
+          backlogFilters.project = updateProjects;
+        }
+        yield put({
+          type: ActionTypes.SET_BACKLOG_FILTER,
+          payload: backlogFilters,
+        });
+        return;
     }
 
 

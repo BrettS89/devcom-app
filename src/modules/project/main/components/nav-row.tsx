@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAlignJustify, faColumns, faFeatherAlt, faCalendarAlt, faCube, faStickyNote } from '@fortawesome/free-solid-svg-icons'
+import { faColumns, faFeatherAlt, faCalendarAlt, faCube, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { useStyles } from '../styles';
 
 interface Props {

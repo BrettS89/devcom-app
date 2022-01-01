@@ -13,9 +13,11 @@ import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 
 import { projectSelector, ActionTypes, filterSelector } from '../../../redux';
 import { useStyles } from './styles';
+import { getProject } from '../../../utilities'
 import { getRows } from './utilities';
 import { priority } from '../../../config';
 import Filters from './components/filters';
+import TypeIcon from './components/ticket-types';
 
 const Backlog = () => {
   const classes = useStyles();
@@ -58,13 +60,19 @@ const Backlog = () => {
           <TableBody>
             {tickets.map(ticket => {
               const ticketPriority = priority.find(p => p.value === ticket.priority);
+              const ticketProject = getProject(ticket, project.project)
 
               return (
                 <TableRow key={ticket._id}>
                   <TableCell align="left" className={classes.status}>
-                    <FontAwesomeIcon icon={faBookmark} style={{ fontSize: 20, color: '#505999' }} />
+                    <TypeIcon type={ticket?.type?.name || 'Feature'} />
                   </TableCell>
-                  <TableCell align="left" className={classes.name}><Typography>{ticket.name}</Typography></TableCell>
+                  <TableCell align="left" className={classes.name}>
+                    <Typography>
+                      {ticketProject?.code}-{ticket?.number} {ticket.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left"><Typography>{ticketProject?.name || 'No Project'}</Typography></TableCell>
                   <TableCell align="left"><Typography>{ticket.sprint?.name}</Typography></TableCell>
                   <TableCell align="left"><Typography>{ticket.status?.name}</Typography></TableCell>
                   <TableCell align="left"><Typography>{ticketPriority?.label}</Typography></TableCell>

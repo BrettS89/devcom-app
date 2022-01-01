@@ -1,15 +1,16 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import { colors } from '../../../styles/colors';
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
     display: 'flex',
     flex: 1,
-    borderTop: '1px solid lightgray',
+    borderTop: `1px solid ${colors.border}`,
   },
   leftNav: {
     display: 'flex',
-    width: 200,
-    backgroundColor: '#3a48b3',
+    width: 180,
+    backgroundColor: theme.palette.primary.main,
     flexDirection: 'column',
     padding: 20,
     color: '#f5f5f5',
@@ -24,4 +25,4 @@ export const useStyles = makeStyles({
     display: 'flex',
     flex: 1,
   }
-});
+}));

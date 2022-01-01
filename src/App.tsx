@@ -8,6 +8,7 @@ import CreateTicket from './components/create-ticket';
 import Router from './routing';
 import { ActionTypes, appSelector } from './redux';
 import { useStyles } from './style';
+import { colors } from './styles/colors';
 import './App.css';
 import 'react-datepicker/dist/react-datepicker.css'
 

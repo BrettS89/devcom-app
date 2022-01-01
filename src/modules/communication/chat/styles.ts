@@ -1,21 +1,22 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { colors } from '../../../styles/colors';
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
     display: 'flex',
     flex: 1,
   },
   leftPannel: {
     display: 'flex',
-    width: 200,
-    backgroundColor: '#3a48b3',
+    width: 180,
+    backgroundColor: theme.palette.primary.main,
     flexDirection: 'column',
     padding: 20,
   },
   channels: {
     display: 'flex',
     flexDirection: 'column',
-    color: '#f5f5f5',
+    color: theme.palette.secondary.main,
     marginBottom: 30,
   },
   generalTitle: {
@@ -31,7 +32,7 @@ export const useStyles = makeStyles({
   chatWindow: {
     display: 'flex',
     flexDirection: 'column',
-    borderTop: '1px solid lightgray',
+    borderTop: `1px solid ${colors.border}`,
     flex: 1,
   },
   chatContent: {
@@ -48,8 +49,10 @@ export const useStyles = makeStyles({
     paddingBottom: 10,
   },
   messageIcon: {
-    minHeight: 50,
-    minWidth: 50,
+    minHeight: 45,
+    minWidth: 45,
+    color: theme.palette.primary.main
+    // color: colors.green
   },
   chatInput: {
     display: 'flex',
@@ -136,4 +139,4 @@ export const useStyles = makeStyles({
   description: {
     marginTop: 10,
   }
-});
+}));

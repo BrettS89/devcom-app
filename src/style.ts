@@ -1,13 +1,13 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
   initContainer: {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#3a48b3',
+    backgroundColor: theme.palette.primary.main,
   },
   logoContainer: {
     display: 'flex',
@@ -23,4 +23,4 @@ export const useStyles = makeStyles({
   spinner: {
     marginTop: 95,
   }
-});
+}));

@@ -40,6 +40,7 @@ interface CreateTicketProps {
     statusId: string;
     sprintId: string;
     typeId: string;
+    projectId: string;
   }
 }
 
@@ -60,6 +61,7 @@ function * createTicketHandler ({ payload }: CreateTicketProps) {
       sprintId: payload.sprintId,
       priority: payload.priority || 3,
       typeId: payload.typeId,
+      projectId: payload.projectId,
     };
 
     const createTicket = () => api
@@ -226,10 +228,12 @@ function * fetchBacklogHandler() {
     const statusId = filters.backlog.status.map(s => s._id);
     const sprintId = filters.backlog.sprint.map(s => s._id);
     const typeId = filters.backlog.type.map(t => t._id);
+    const projectId = filters.backlog.project.map(p => p._id);
     const priority = filters.backlog.priorities;
 
     const query = {
       priority,
+      projectId: { $in: projectId },
       statusId: { $in: statusId },
       sprintId: { $in: sprintId },
       typeId: { $in: typeId },
@@ -252,6 +256,8 @@ function * fetchBacklogHandler() {
     if (!sprintId.length) delete query.sprintId;
     //@ts-ignore
     if (!typeId.length) delete query.typeId;
+    //@ts-ignore
+    if (!projectId.length) delete query.projectId;
 
     const fn = () => api
       .service('project/ticket')

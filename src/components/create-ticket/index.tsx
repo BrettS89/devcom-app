@@ -33,11 +33,11 @@ const CreateTicket = () => {
   const [assignedDev, setAssignedDev] = useState(undefined);
   const [assignedTester, setAssignedTester] = useState(undefined);
   const [assignedManager, setAssignedManager] = useState('');
-
   const [ticketPriority, setTicketPriority] = useState(undefined);
   const [ticketStatus, setTicketStatus] = useState(undefined);
   const [ticketSprint, setTicketSprint] = useState(undefined);
   const [ticketType, setTicketType] = useState(undefined); 
+  const [projectAssigned, setProjectAssigned] = useState(undefined);
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ const CreateTicket = () => {
     setTicketStatus(undefined);
     setTicketSprint(undefined);
     setTicketType(undefined);
+    setProjectAssigned(undefined);
   };
 
   const closeModal = () => {
@@ -98,6 +99,7 @@ const CreateTicket = () => {
         statusId: ticketStatus,
         sprintId: ticketSprint,
         typeId: ticketType,
+        projectId: projectAssigned,
       },
     });
 
@@ -149,6 +151,20 @@ const CreateTicket = () => {
               <div className={classes.label}>
                 <Typography className='bold'>Ticket Details</Typography>
               </div>
+
+              <TextField
+                select
+                variant='outlined'
+                size='small'
+                className={classes.assignField}
+                label='Project'
+                value={projectAssigned}
+                onChange={e => setProjectAssigned(e.target.value)}
+              >
+                {project.project.map(p => (
+                  <MenuItem value={p._id}>{p.name}</MenuItem>
+                ))}
+              </TextField>
 
               <TextField
                 select

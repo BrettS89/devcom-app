@@ -17,8 +17,6 @@ const Filters = () => {
   const project = useSelector(projectSelector);
   const filter = useSelector(filterSelector);
 
-  const sprints = [];
-
   const findPriorityLabel = (n: number): string => {
     return priority.find(p => p.value === n)?.label || ' ';
   }
@@ -52,7 +50,31 @@ const Filters = () => {
 
   return (
     <div className={classes.filters}>
-      <FormControl style={{ width: 200, marginTop: 0 }} margin='dense' variant='outlined'>
+      <FormControl className={classes.filter} margin='dense' variant='outlined'>
+        <InputLabel id="project-backlog-filter" margin='dense'>Project</InputLabel>
+        <Select
+          labelId="project-backlog-filter"
+          label='Project'
+          multiple
+          value={filter.backlog.project}
+          input={<OutlinedInput margin='dense' label='Project' />}
+          //@ts-ignore
+          renderValue={(selected) => selected.map(s => s.name).join(', ')}
+        >
+          {project.project.map((singleProject) => (
+            <MenuItem key={singleProject._id} value={singleProject._id}>
+              <Checkbox
+                onChange={() => onChange(singleProject.name, 'project', singleProject._id)}
+                checked={!!filter.backlog.project.find(s => s._id === singleProject._id)}
+                color='primary' name={singleProject.name}
+              />
+              <ListItemText primary={singleProject.name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl className={classes.filter} margin='dense' variant='outlined'>
         <InputLabel id="type-backlog-filter" margin='dense'>Type</InputLabel>
         <Select
           labelId="type-backlog-filter"
@@ -76,7 +98,7 @@ const Filters = () => {
         </Select>
       </FormControl>
 
-      <FormControl style={{ width: 200, marginTop: 0, marginLeft: 10 }} margin='dense' variant='outlined'>
+      <FormControl className={classes.filter} margin='dense' variant='outlined'>
         <InputLabel id="sprint-backlog-filter" margin='dense'>Sprint</InputLabel>
         <Select
           labelId="sprint-backlog-filter"
@@ -100,7 +122,7 @@ const Filters = () => {
         </Select>
       </FormControl>
 
-      <FormControl style={{ width: 200, marginTop: 0, marginLeft: 10 }} margin='dense' variant='outlined'>
+      <FormControl className={classes.filter} margin='dense' variant='outlined'>
         <InputLabel id="status-backlog-filter" margin='dense'>Status</InputLabel>
         <Select
           labelId="status-backlog-filter"
@@ -124,7 +146,7 @@ const Filters = () => {
         </Select>
       </FormControl>
 
-      <FormControl style={{ width: 200, marginTop: 0, marginLeft: 10 }} margin='dense' variant='outlined'>
+      <FormControl className={classes.filter} margin='dense' variant='outlined'>
         <InputLabel id="priority-backlog-filter" margin='dense'>Priority</InputLabel>
         <Select
           labelId="priority-backlog-filter"
